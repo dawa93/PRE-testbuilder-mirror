@@ -19,9 +19,9 @@ describe("Introduction to Mocha Tests - READ ME FIRST", function() {
   // 먼저 아래의 테스트를 수정해 테스트가 정상적으로 작동하도록 해주세요.
   // 그리고 Diner's club과 American Express 테스트로 넘어가주세요
 
-  it("오류가 발생하면 테스트가 실패합니다.", function() {
-    throw new Error("저를 지워주세요!");
-  });
+  // it("오류가 발생하면 테스트가 실패합니다.", function() {
+  //   throw new Error("저를 지워주세요!");
+  // });
 
   it("오류가 발생하지 않으므로, 실패하지 않습니다.", function() {
     // 이 테스트는 실제로 아무것도 테스트하지 않습니다. 그러므로 그냥 여기는 통과하게 됩니다.
@@ -35,7 +35,7 @@ describe("Introduction to Mocha Tests - READ ME FIRST", function() {
   // 예상 동작이 실제 동작과 다르다면, 테스트는 실패해야 합니다.
   it("예상 동작이 실제 동작과 일치하지 않을 때 오류가 발생합니다.", function() {
     let even = function(num) {
-      return num / 2 === 0; // 체크하려는 함수에 뭔가 문제가 있군요!
+      return num % 2 === 0; // 체크하려는 함수에 뭔가 문제가 있군요!
     };
 
     if (even(10) !== true) {
@@ -52,7 +52,7 @@ describe("Diner's Club", function() {
   // 주의하세요, 테스트에도 버그가 존재할 수 있습니다...
 
   it("has a prefix of 38 and a length of 14", function() {
-    throw new Error("Delete me!");
+    //throw new Error("Delete me!");
 
     if (detectNetwork("38345678901234") !== "Diner's Club") {
       throw new Error("Test failed");
@@ -60,7 +60,7 @@ describe("Diner's Club", function() {
   });
 
   it("has a prefix of 39 and a length of 14", function() {
-    if (detectNetwork("3934567890123") !== "Diner's Club") {
+    if (detectNetwork("3934567890123") === "Diner's Club") {
       throw new Error("Test failed");
     }
   });
@@ -89,7 +89,7 @@ describe("Visa", function() {
   // Chai는 이전에 만들었던 assert 함수와 동일한 기능을 하는 assert 함수를 제공합니다.
   // Chai가 제공하는 assert 함수를 어떻게 사용하는지 웹사이트의 공식 문서를 참고해보세요.
   //   http://chaijs.com/
-  let assert = chai.FILL_ME_IN;
+  let assert = chai.assert;
 
   it("has a prefix of 4 and a length of 13", function() {
     assert(detectNetwork("4123456789012") === "Visa");
@@ -111,15 +111,15 @@ describe("MasterCard", function() {
   //   http://chaijs.com/api/bdd/
   let expect = chai.expect;
 
-  it(FILL_ME_IN, function() {
+  it("has a prefix of 51 and a length of 16", function() {
     expect(detectNetwork("5112345678901234")).to.equal("MasterCard");
   });
 
-  it(FILL_ME_IN, function() {
+  it("has a prefix of 52 and a length of 16", function() {
     expect(detectNetwork("5212345678901234")).to.equal("MasterCard");
   });
 
-  it(FILL_ME_IN, function() {
+  it("has a prefix of 53 and a length of 16", function() {
     expect(detectNetwork("5312345678901234")).to.equal("MasterCard");
   });
 
@@ -133,19 +133,69 @@ describe("MasterCard", function() {
   let should = chai.should();
 
   it("has a prefix of 54 and a length of 16", function() {
-    detectNetwork("5412345678901234").should.equal(FILL_ME_IN);
+    detectNetwork("5412345678901234").should.equal("MasterCard");
   });
 
   it("has a prefix of 55 and a length of 16", function() {
-    detectNetwork("5512345678901234").should.equal(FILL_ME_IN);
+    detectNetwork("5512345678901234").should.equal("MasterCard");
   });
 });
 
 describe("Discover", function() {
   // 함수가 없는 테스트는 "pending"이라는 표시가 뜨며 실행되지 않습니다.
   // 아래 테스트를 작성하고 테스트가 통과하도록 만드십시오.
-  it("has a prefix of 6011 and a length of 16");
-  it("has a prefix of 6011 and a length of 19");
+  let should = chai.expect();
+
+  it("has a prefix of 6011 and a length of 16", function() {
+    detectNetwork("6011234567891234").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 16", function() {
+    detectNetwork("6511234567891234").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 16", function() {
+    detectNetwork("6441234567891234").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 16", function() {
+    detectNetwork("6451234567891234").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 16", function() {
+    detectNetwork("6461234567891234").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 16", function() {
+    detectNetwork("6471234567891234").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 16", function() {
+    detectNetwork("6481234567891234").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 16", function() {
+    detectNetwork("6491123467891234").should.equal("Discover");
+  });
+
+  // 19줄 일 때
+  it("has a prefix of 6011 and a length of 19", function() {
+    detectNetwork("6011234567891234123").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 19", function() {
+    detectNetwork("6511234567891234123").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 19", function() {
+    detectNetwork("6441234567891234123").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 19", function() {
+    detectNetwork("6451234567891234123").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 19", function() {
+    detectNetwork("6461234567891234123").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 19", function() {
+    detectNetwork("6471234567891234123").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 19", function() {
+    detectNetwork("6481234567891234123").should.equal("Discover");
+  });
+  it("has a prefix of 6011 and a length of 19", function() {
+    detectNetwork("6491123467891234123").should.equal("Discover");
+  });
 });
 
 // Maestro, China UnionPay와 Switch를 검사하는 것은 Advanced 과제입니다.
