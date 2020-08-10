@@ -19,9 +19,9 @@ describe("Introduction to Mocha Tests - READ ME FIRST", function() {
   // 먼저 아래의 테스트를 수정해 테스트가 정상적으로 작동하도록 해주세요.
   // 그리고 Diner's club과 American Express 테스트로 넘어가주세요
 
-  // it("오류가 발생하면 테스트가 실패합니다.", function() {
-  //   throw new Error("저를 지워주세요!");
-  // });
+  it("오류가 발생하면 테스트가 실패합니다.", function() {
+    // throw new Error("저를 지워주세요!");
+  });
 
   it("오류가 발생하지 않으므로, 실패하지 않습니다.", function() {
     // 이 테스트는 실제로 아무것도 테스트하지 않습니다. 그러므로 그냥 여기는 통과하게 됩니다.
@@ -144,7 +144,7 @@ describe("MasterCard", function() {
 describe("Discover", function() {
   // 함수가 없는 테스트는 "pending"이라는 표시가 뜨며 실행되지 않습니다.
   // 아래 테스트를 작성하고 테스트가 통과하도록 만드십시오.
-  let should = chai.expect();
+  let should = chai.should();
 
   it("has a prefix of 6011 and a length of 16", function() {
     detectNetwork("6011234567891234").should.equal("Discover");
@@ -200,6 +200,123 @@ describe("Discover", function() {
 
 // Maestro, China UnionPay와 Switch를 검사하는 것은 Advanced 과제입니다.
 // 원하시는 분들은 도전해보세요!
-describe("Maestro", function() {});
-describe("should support China UnionPay", function() {});
-describe("should support Switch", function() {});
+describe("Maestro", function() {
+  let expect = chai.expect;
+
+  //5018, 5020, 5038 또는 6304로 시작하고 12에서부터 19까지 자리의 숫자입니다
+  //has a prefix of 5018 and a length of 12
+  //has a prefix of 5020 and a length of 12
+  //has a prefix of 5038 and a length of 12
+  //has a prefix of 6304 and a length of 12
+  let tail = "5678901";
+  for (let cardNumber = 12; cardNumber <= 19; cardNumber++) {
+    tail = tail + 1;
+    it("has a prefix of 5018 and a length of" + cardNumber, function() {
+      expect(detectNetwork(5018 + tail)).to.equal("Maestro");
+    });
+    it("has a prefix of 5020 and a length of" + cardNumber, function() {
+      expect(detectNetwork(5020 + tail)).to.equal("Maestro");
+    });
+    it("has a prefix of 5038 and a length of" + cardNumber, function() {
+      expect(detectNetwork(5038 + tail)).to.equal("Maestro");
+    });
+    it("has a prefix of 6304 and a length of" + cardNumber, function() {
+      expect(detectNetwork(6304 + tail)).to.equal("Maestro");
+    });
+  }
+});
+
+describe("should support China UnionPay", function() {
+  let expect = chai.expect;
+  //China UnionPay 카드 조건
+  // China UnionPay는 항상 622126-622925, 624-626, 혹은 6282-6288로 시작하고
+  //   //16-19자리의 숫자입니다.
+  //624 ~626
+  let tail624 = "456789012345";
+  for (let cardNumber = 16; cardNumber <= 19; cardNumber++) {
+    tail624 = tail624 + 1;
+    it("has a prefix of 624 and a length of " + cardNumber, function() {
+      expect(detectNetwork(624 + tail624)).to.equal("China UnionPay");
+    });
+    it("has a prefix of 625 and a length of " + cardNumber, function() {
+      expect(detectNetwork(625 + tail624)).to.equal("China UnionPay");
+    });
+    it("has a prefix of 626 and a length of " + cardNumber, function() {
+      expect(detectNetwork(626 + tail624)).to.equal("China UnionPay");
+    });
+  }
+  // 6282 ~ 6288
+
+  let tail6282 = "56789012345";
+
+  for (let cardNumber = 16; cardNumber <= 19; cardNumber++) {
+    tail6282 = tail6282 + 1;
+    for (let prefix4 = 6282; prefix4 <= 6288; prefix4++) {
+      it(
+        "has a prefix of " + prefix4 + "and a length of " + cardNumber,
+        function() {
+          expect(detectNetwork(prefix4 + tail6282)).to.equal("China UnionPay");
+        }
+      );
+    }
+  }
+
+  //622126 ~ 622925
+  let tail622126 = "789012345";
+
+  for (let cardNumber = 16; cardNumber <= 19; cardNumber++) {
+    tail622126 = tail622126 + 1;
+    for (let prefix6 = 622126; prefix6 <= 622925; prefix6++) {
+      it(
+        "has a prefix of " + prefix6 + "and a length of " + cardNumber,
+        function() {
+          expect(detectNetwork(prefix6 + tail622126)).to.equal(
+            "China UnionPay"
+          );
+        }
+      );
+    }
+  }
+});
+
+describe("should support Switch", function() {
+  let expect = chai.expect;
+
+  // Switch는 항상 4903, 4905, 4911, 4936, 564182, 633110, 6333 혹은 6759로 시작하고
+  // 16, 18, 혹은 19자리의 숫자입니다..
+
+  let tailFor4 = "56789012345";
+  let tailFor6 = "7890123456";
+
+  for (let cardNumber = 16; cardNumber <= 19; cardNumber++) {
+    if (cardNumber !== 17) {
+      tailFor4 = tailFor4 + "1";
+      tailFor6 = tailFor6 + "1";
+
+      it("has a prefix of 6333 and a length of " + cardNumber, function() {
+        expect(detectNetwork(6333 + tailFor4)).to.equal("Switch");
+      });
+      it("has a prefix of 6759 and a length of " + cardNumber, function() {
+        expect(detectNetwork(6759 + tailFor4)).to.equal("Switch");
+      });
+      it("has a prefix of 4903 and a length of " + cardNumber, function() {
+        expect(detectNetwork(4903 + tailFor4)).to.equal("Switch");
+      });
+      it("has a prefix of 4905 and a length of " + cardNumber, function() {
+        expect(detectNetwork(4905 + tailFor4)).to.equal("Switch");
+      });
+      it("has a prefix of 4911 and a length of " + cardNumber, function() {
+        expect(detectNetwork(4911 + tailFor4)).to.equal("Switch");
+      });
+      it("has a prefix of 4936 and a length of " + cardNumber, function() {
+        expect(detectNetwork(4936 + tailFor4)).to.equal("Switch");
+      });
+      it("has a prefix of 564182 and a length of " + cardNumber, function() {
+        expect(detectNetwork(564182 + tailFor6)).to.equal("Switch");
+      });
+      it("has a prefix of 633110 and a length of " + cardNumber, function() {
+        expect(detectNetwork(633110 + tailFor6)).to.equal("Switch");
+      });
+    }
+  }
+});

@@ -24,22 +24,56 @@ function detectNetwork(cardNumber) {
   let two = cardNumber[1];
   let three = cardNumber[2];
   let four = cardNumber[3];
+  let five = cardNumber[4];
+  let six = cardNumber[5];
 
-  if (one + two === "38" || one + two === "39") {
+  let prefix1 = one;
+  let prefix2 = one + two;
+  let prefix3 = one + two + three;
+  let prefix4 = one + two + three + four;
+  let prefix5 = one + two + three + four + five;
+  let prefix6 = one + two + three + four + five + six;
+
+  // Diner's club카드 조건
+  if (prefix2 === "38" || prefix2 === "39") {
     if (cardNumber.length === 14) {
       //위가 맞다면 디너스카드를 리턴하면 됩니다
       return "Diner's Club";
     }
   }
 
-  if (one + two === "34" || one + two === "37") {
+  // American Express 카드 조건
+  if (prefix2 === "34" || prefix2 === "37") {
     if (cardNumber.length === 15) {
       //만약에 위의 조건이 아니라면, 아메리칸 카드를 리턴해보겠습니다
       return "American Express";
     }
   }
 
-  if (one === "4") {
+  // Visa 카드 조건 + Swirch
+  // Visa 는 4로 시작하고, 길이가 13, 16, 19인것.
+
+  // Switch는 항상 4903, 4905, 4911, 4936, 564182, 633110, 6333 혹은 6759로 시작하고
+  // 16, 18, 혹은 19자리의 숫자입니다..
+  // 잠시만요! Switch와 Visa의 카드번호를 검사할 때에 prefix에서 겹치는 부분이 있는 것 같습니다.
+  if (
+    prefix4 === "4903" ||
+    prefix4 === "4905" ||
+    prefix4 === "4911" ||
+    prefix4 === "4936" ||
+    prefix6 === "564182" ||
+    prefix6 === "633110" ||
+    prefix4 === "6333" ||
+    prefix4 === "6759"
+  ) {
+    if (
+      cardNumber.length === 16 ||
+      cardNumber.length === 18 ||
+      cardNumber.length === 19
+    ) {
+      return "Switch";
+    }
+  } else if (prefix1 === "4") {
     if (
       cardNumber.length === 13 ||
       cardNumber.length === 16 ||
@@ -49,35 +83,64 @@ function detectNetwork(cardNumber) {
     }
   }
 
+  //MasterCard 카드 조건
   if (
     //MasterCard 카드번호는 항상 51, 52, 53, 54, 혹은 55로 시작하고 16자리의 숫자입니다.
-    one + two === "51" ||
-    one + two === "52" ||
-    one + two === "53" ||
-    one + two === "54" ||
-    one + two === "55"
+    prefix2 === "51" ||
+    prefix2 === "52" ||
+    prefix2 === "53" ||
+    prefix2 === "54" ||
+    prefix2 === "55"
   ) {
     if (cardNumber.length === 16) {
       return "MasterCard";
     }
   }
 
+  //Discover 카드 조건
   if (
-    one + two + three === "644" ||
-    one + two + three === "645" ||
-    one + two + three === "646" ||
-    one + two + three === "647" ||
-    one + two + three === "648" ||
-    one + two + three === "649" ||
-    one + two + three + four === "6011" ||
-    one + two === "65"
+    prefix3 === "644" ||
+    prefix3 === "645" ||
+    prefix3 === "646" ||
+    prefix3 === "647" ||
+    prefix3 === "648" ||
+    prefix3 === "649" ||
+    prefix4 === "6011" ||
+    prefix2 === "65"
   ) {
     if (cardNumber.length === 16 || cardNumber.length === 19) {
       return "Discover";
     }
   }
-  //
+
+  // Maestro 카드 조건
+  // Maestro는 항상 5018, 5020, 5038 또는 6304로 시작하고 12에서부터 19까지 자리의 숫자입니다.
+  if (
+    prefix4 === "5018" ||
+    prefix4 === "5020" ||
+    prefix4 === "5038" ||
+    prefix4 === "6304"
+  ) {
+    if (cardNumber.length >= 12 && cardNumber.length <= 19) {
+      return "Maestro";
+    }
+  }
+
+  //China UnionPay 카드 조건
+  // China UnionPay는 항상 622126-622925, 624-626, 혹은 6282-6288로 시작하고
+  //16-19자리의 숫자입니다.
+  if (
+    (Number(prefix6) >= 622126 && Number(prefix6) <= 622925) ||
+    (Number(prefix3) >= 624 && Number(prefix3) <= 626) ||
+    (Number(prefix4) >= 6282 && Number(prefix4) <= 6288)
+  ) {
+    if (cardNumber.length >= 16 && cardNumber.length <= 19) {
+      return "China UnionPay";
+    }
+  }
 }
+
+// prefix가 겹칠 때는 어떻게 검사를 진행해야할까요?
 
 // you don't have to worry about this code. keep this code.
 
@@ -104,4 +167,4 @@ if (typeof window === "undefined") {
 //   if (cardNumber.length === 16 || cardNumber.length === 19) {
 //     return "Discover";
 //   }
-// }
+// }\
